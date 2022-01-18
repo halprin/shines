@@ -1,18 +1,37 @@
 SPRITES = []
+
+BLOCKS = []
+
 HERO = Hero.new(500, 200)
+
 BLOCK = Block.new(500, 150)
+BLOCKS << BLOCK
+
 SPRITES << HERO
-SPRITES << BLOCK
+SPRITES.concat(BLOCKS)
 
 def tick(args)
 
-  HERO.jump() if args.inputs.keyboard.space
-  HERO.move_right() if right_pressed_no_left(args)
-  HERO.move_left() if left_pressed_no_right(args)
+  colision_checking(args)
+
+  input_checking(args)
 
   SPRITES.each(&:calculate)
 
   args.outputs.sprites << SPRITES
+end
+
+def colision_checking(args)
+  if BLOCKS.any_intersect_rect? HERO
+    args.outputs.labels << [500, 500, 'intersection']
+    HERO.stand()
+  end
+end
+
+def input_checking(args)
+  HERO.jump() if args.inputs.keyboard.space
+  HERO.move_right() if right_pressed_no_left(args)
+  HERO.move_left() if left_pressed_no_right(args)
 end
 
 def right_pressed_no_left(args)
