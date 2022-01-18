@@ -2,12 +2,18 @@ class Hero < Sprite
   @@initial_jump_acceleration = 1
   @@max_jump_velocity = 10
 
+  @@gravity_acceleration = 1
+  @@max_gravity_velocity = 10
+
+
   def initialize(starting_x, starting_y)
     super('/sprites/hero/hero.png', starting_x, starting_y, 16, 16)
 
     @jumping = false
     @jump_velocity = 0
     @jump_acceleration = 1
+
+    @gravity_velocity = 0
 
     @move_velocity = 1
     @moving_right = false
@@ -38,9 +44,25 @@ class Hero < Sprite
   # Calculation methods
 
   def calculate
+    _calculate_gravity()
     _calculate_jump() if @jumping
     _calculate_move_right() if @moving_right
     _calculate_move_left() if @moving_left
+  end
+
+  def _calculate_gravity
+
+    # check for terminal velocity
+    if @gravity_velocity >= @@max_gravity_velocity
+      # we've hit terminal velocity on the way down
+      @gravity_velocity = @@max_gravity_velocity
+    else
+      # not terminal velocity yet, keep increasing velocity
+      @gravity_velocity += @@gravity_acceleration
+    end
+
+    # modify the y position
+    @y -= @gravity_velocity
   end
 
   def _calculate_jump

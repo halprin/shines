@@ -1,6 +1,8 @@
 SPRITES = []
 HERO = Hero.new(500, 200)
+BLOCK = Block.new(500, 150)
 SPRITES << HERO
+SPRITES << BLOCK
 
 def tick(args)
 
