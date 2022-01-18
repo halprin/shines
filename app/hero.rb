@@ -27,6 +27,15 @@ class Hero < Sprite
     _reset_jump()
   end
 
+  def unstand
+    return unless @standing
+
+    @standing = false
+
+    @jumping = false
+    _reset_jump()
+  end
+
   def jump
     if @jumping || !@standing
       # jumping is already in progress, don't start the jump over

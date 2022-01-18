@@ -25,6 +25,8 @@ def colision_checking(args)
   if BLOCKS.any_intersect_rect? HERO
     args.outputs.labels << [500, 500, 'intersection']
     HERO.stand()
+  else
+    HERO.unstand()
   end
 end
 
