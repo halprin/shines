@@ -12,7 +12,7 @@ SPRITES.concat(BLOCKS)
 
 def tick(args)
 
-  colision_checking(args)
+  collision_checking(args)
 
   input_checking(args)
 
@@ -21,10 +21,15 @@ def tick(args)
   args.outputs.sprites << SPRITES
 end
 
-def colision_checking(args)
-  if BLOCKS.any_intersect_rect? HERO
+def collision_checking(args)
+  collision_for_blocks(args)
+end
+
+def collision_for_blocks(args)
+  intersecting_blocks = BLOCKS.select { |block| block.intersect_rect?(HERO, 0) }
+  if intersecting_blocks.size() > 0
     args.outputs.labels << [500, 500, 'intersection']
-    HERO.stand()
+    HERO.stand(intersecting_blocks)
   else
     HERO.unstand()
   end

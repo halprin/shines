@@ -20,11 +20,15 @@ class Hero < Sprite
 
   # Action methods
 
-  def stand
+  def stand(intersecting_blocks)
     @standing = true
 
     @jumping = false
     _reset_jump()
+
+    # TODO: support multiple blocks?
+    first_intersecting_block = intersecting_blocks[0]
+    @y = first_intersecting_block.y + first_intersecting_block.h
   end
 
   def unstand
