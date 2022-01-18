@@ -1,85 +1,79 @@
 class Hero < Sprite
-	@@initialJumpAcceleration = 1
-	@@maxJumpVelocity = 10
+  @@initial_jump_acceleration = 1
+  @@max_jump_velocity = 10
 
-	def initialize(starting_x, starting_y)
-		super('/sprites/hero/wall-0000.png', starting_x, starting_y, 16, 16)
+  def initialize(starting_x, starting_y)
+    super('/sprites/hero/wall-0000.png', starting_x, starting_y, 16, 16)
 
-		@jumping = false
-		@jumpVelocity = 0
-		@jumpAcceleration = 1
+    @jumping = false
+    @jump_velocity = 0
+    @jump_acceleration = 1
 
-		@moveVelocity = 1
-		@movingRight = false
-		@movingLeft = false
-	end
+    @move_velocity = 1
+    @moving_right = false
+    @moving_left = false
+  end
 
-	# Action methods
+  # Action methods
 
-	def jump
-		if @jumping
-			# jumping is already in progress, don't start the jump over
-			return
-		end
+  def jump
+    if @jumping
+      # jumping is already in progress, don't start the jump over
+      return
+    end
 
-		@jumping = true
-		@jumpVelocity = 0
-		@jumpAcceleration = @@initialJumpAcceleration
-	end
+    @jumping = true
+    @jump_velocity = 0
+    @jump_acceleration = @@initial_jump_acceleration
+  end
 
-	def moveRight
-		@movingRight = true
-	end
+  def move_right
+    @moving_right = true
+  end
 
-	def moveLeft
-		@movingLeft = true
-	end
+  def move_left
+    @moving_left = true
+  end
 
-	# Calculation methods
+  # Calculation methods
 
-	def calculate
-		if @jumping
-			_calculate_jump()
-		end
-		if @movingRight
-			_calculate_moveRight()
-		end
-		if @movingLeft
-			_calculate_moveLeft()
-		end
-	end
+  def calculate
+    _calculate_jump() if @jumping
+    _calculate_move_right() if @moving_right
+    _calculate_move_left() if @moving_left
+  end
 
-	def _calculate_jump
+  def _calculate_jump
 
-		if @jumpVelocity > @@maxJumpVelocity
-			# hit max speed of the jump up, need to start slowing down
-			@jumpAcceleration = -1 * @@initialJumpAcceleration
-		end
+    if @jump_velocity > @@max_jump_velocity
+      # hit max speed of the jump up, need to start slowing down
+      @jump_acceleration = -1 * @@initial_jump_acceleration
+    end
 
-		if @jumpAcceleration == (-1 * @@initialJumpAcceleration) && @jumpVelocity <= -1 * @@maxJumpVelocity
-			# we've hit terminal velocity on the way down
-			@jumpAcceleration = 0
-		end
+    if @jump_acceleration == (-1 * @@initial_jump_acceleration) && @jump_velocity <= -1 * @@max_jump_velocity
+      # we've hit terminal velocity on the way down
+      @jump_acceleration = 0
+    end
 
-		if @y <= 0 && @jumpAcceleration == 0
-			# we're done jumping, force hero to the bottom
-			@y = 0
-			@jumping = false
-			return
-		end
+    if @y <= 0 && @jump_acceleration.zero?
+      # we're done jumping, force hero to the bottom
+      @y = 0
+      @jumping = false
+      return
+    end
 
-		# modify the values
-		@jumpVelocity += @jumpAcceleration
-		@y += @jumpVelocity
-	end
+    # modify the values
+    @jump_velocity += @jump_acceleration
+    @y += @jump_velocity
+  end
 
-	def _calculate_moveRight
-		@x += @moveVelocity
-		@movingRight = false
-	end
+  def _calculate_move_right
+    @x += @move_velocity
+    @moving_right = false
+  end
 
-	def _calculate_moveLeft
-		@x -= @moveVelocity
-		@movingLeft = false
-	end
+  def _calculate_move_left
+    @x -= @move_velocity
+    @moving_left = false
+  end
 end
