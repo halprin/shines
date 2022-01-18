@@ -3,7 +3,7 @@ class Hero < Sprite
   @@max_jump_velocity = 10
 
   def initialize(starting_x, starting_y)
-    super('/sprites/hero/wall-0000.png', starting_x, starting_y, 16, 16)
+    super('/sprites/hero/hero.png', starting_x, starting_y, 16, 16)
 
     @jumping = false
     @jump_velocity = 0

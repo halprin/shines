@@ -1,5 +1,5 @@
 SPRITES = []
-HERO = Hero.new(500, 0)
+HERO = Hero.new(500, 200)
 SPRITES << HERO
 
 def tick(args)
