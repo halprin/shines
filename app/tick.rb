@@ -4,8 +4,7 @@ BLOCKS = []
 
 HERO = Hero.new(500, 200)
 
-BLOCK = Block.new(500, 150)
-BLOCKS << BLOCK
+BLOCKS << Block.new(500, 150) << Block.new(500 + 16 + 8, 150 - 16)
 
 SPRITES << HERO
 SPRITES.concat(BLOCKS)
@@ -27,10 +26,17 @@ end
 
 def collision_for_blocks(args)
   intersecting_blocks = BLOCKS.select { |block| block.intersect_rect?(HERO, 0) }
+
   if intersecting_blocks.size() > 0
-    args.outputs.labels << [500, 500, 'intersection']
-    HERO.stand(intersecting_blocks)
+    above_blocks = intersecting_blocks.select { |block| block.collision_side(HERO) == 'TOP' }
+
+    if above_blocks.size() > 0
+      HERO.stand(above_blocks)
+    else
+      HERO.unstand()
+    end
   else
+    # undo any block based actions
     HERO.unstand()
   end
 end
