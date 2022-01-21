@@ -69,8 +69,6 @@ class Hero < Sprite
   # Calculation methods
 
   def calculate
-    puts("y=#{@y}")
-    puts("vertical velocity=#{@vertical_velocity}")
     _calculate_gravity() unless @standing
     _calculate_jump() if @jumping
     _calculate_vertical_position()
