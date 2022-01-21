@@ -15,7 +15,9 @@ class Hero < Sprite
 
     @move_velocity = 1
     @moving_right = false
+    @allow_moving_right = true
     @moving_left = false
+    @allow_moving_left = false
   end
 
   # Action methods
@@ -38,6 +40,32 @@ class Hero < Sprite
 
     @jumping = false
     _reset_jump()
+  end
+
+  def stop_right_movement(intersecting_blocks)
+    @moving_right = false
+    @allow_moving_right = false
+
+    # TODO: support multiple blocks?
+    first_intersecting_block = intersecting_blocks[0]
+    @x = first_intersecting_block.x - @w
+  end
+
+  def allow_right_movement
+    @allow_moving_right = true
+  end
+
+  def stop_left_movement(intersecting_blocks)
+    @moving_left = false
+    @allow_moving_left = false
+
+    # TODO: support multiple blocks?
+    first_intersecting_block = intersecting_blocks[0]
+    @x = first_intersecting_block.x + first_intersecting_block.w
+  end
+
+  def allow_left_movement
+    @allow_moving_left = true
   end
 
   def jump
@@ -72,8 +100,8 @@ class Hero < Sprite
     _calculate_gravity() unless @standing
     _calculate_jump() if @jumping
     _calculate_vertical_position()
-    _calculate_move_right() if @moving_right
-    _calculate_move_left() if @moving_left
+    _calculate_move_right() if @moving_right && @allow_moving_right
+    _calculate_move_left() if @moving_left && @allow_moving_left
   end
 
   def _calculate_vertical_position
