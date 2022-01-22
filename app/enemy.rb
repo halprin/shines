@@ -21,6 +21,10 @@ class Enemy < Sprite
     if @previous_progress >= 1
       # reset the start as being now since we fulfilled the entire animation of the enemy
       @start_tick = args.state.tick_count
+      if @path_type == "rewind"
+        @starting_x, @ending_x = @ending_x, @starting_x
+        @starting_y, @ending_y = @ending_y, @starting_y
+      end
     end
 
     progress = args.easing.ease(@start_tick, args.state.tick_count, @duration * 60, :identity)

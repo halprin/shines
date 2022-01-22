@@ -15,8 +15,19 @@
       "x": 20,
       "y": 20
     },
-    "path": "loop",
+    "path": "rewind",
     "duration": 2
+  }, {
+    "start": {
+      "x": 7,
+      "y": 7
+    },
+    "end": {
+      "x": 1,
+      "y": 7
+    },
+    "path": "loop",
+    "duration": 1
   }],
   "blocks": [{
       "type": "solid",
