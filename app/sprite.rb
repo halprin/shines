@@ -1,12 +1,8 @@
 class Sprite
   attr_sprite
 
-  @@fourty_five = Math::PI / 4
-  @@one_thirty_five = 3 * Math::PI / 4
-  @@two_twenty_five = 5 * Math::PI / 4
-  @@three_fifteen = 7 * Math::PI / 4
-
-  def initialize(image_path, x, y, width, height)
+  def initialize(args, image_path, x, y, width, height)
+    @args = args
     @path = image_path
     @x = x
     @y = y
@@ -21,29 +17,18 @@ class Sprite
   # Returns which side of this sprite that other_sprite is
   def collision_side(other_sprite)
 
-    radians = angle_to_sprite(other_sprite)
+    radians = @args.geometry.angle_to(center(), other_sprite.center())
 
-    if radians > @@fourty_five && radians <= @@one_thirty_five
+    if radians > 45 && radians < 135
+      # A skinny top so we can't stand past the left side
       return 'TOP'
-    elsif radians > @@one_thirty_five && radians <= @@two_twenty_five
+    elsif radians >= 135 && radians <= 225
       return 'LEFT'
-    elsif radians > @@two_twenty_five && radians <= @@three_fifteen
+    elsif radians > 225 && radians <= 315
       return 'BOTTOM'
     else
       return 'RIGHT'
     end
-  end
-
-  def angle_to_sprite(other_sprite)
-    this_center = center()
-    other_center = other_sprite.center()
-
-    delta_x = other_center[0] - this_center[0]
-    delta_y = other_center[1] - this_center[1]
-
-    theta_radians = Math.atan2(delta_y, delta_x)
-
-    return theta_radians
   end
 
   def center

@@ -6,8 +6,8 @@ class Hero < Sprite
   @@max_gravity_velocity = -10
 
 
-  def initialize(starting_x, starting_y)
-    super('/sprites/hero/hero.png', starting_x, starting_y, 16, 16)
+  def initialize(args, starting_x, starting_y)
+    super(args, '/sprites/hero/hero.png', starting_x, starting_y, 16, 16)
 
     @jumping = false
     @standing = false

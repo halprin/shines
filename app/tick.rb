@@ -1,23 +1,20 @@
-SPRITES = []
-
-BLOCKS = []
-
-HERO = Hero.new(500, 200)
-
-BLOCKS << Block.new(500, 150) << Block.new(500 + 16 + 8, 150 - 16) << Block.new(500 + 16 + 8 + 16 + 8, 150)
-
-SPRITES << HERO
-SPRITES.concat(BLOCKS)
-
 def tick(args)
 
-  collision_checking(args)
+  if args.state.tick_count == 0
+    initialize(args)
+  end
 
-  input_checking(args)
+  # if args.state.tick_count % 15 == 0
+    # collision_checking(args)
 
-  SPRITES.each(&:calculate)
+    input_checking(args)
 
-  args.outputs.sprites << SPRITES
+  args.state.sprites.all.each(&:calculate)
+
+    collision_checking(args)
+  # end
+
+  args.outputs.sprites << args.state.sprites.all
 end
 
 def collision_checking(args)
@@ -25,42 +22,49 @@ def collision_checking(args)
 end
 
 def collision_for_blocks(args)
-  intersecting_blocks = BLOCKS.select { |block| block.intersect_rect?(HERO, 0) }
+  hero = args.state.sprites.hero
+
+  intersecting_blocks = args.state.sprites.blocks.select { |block| block.intersect_rect?(hero, 0) }
 
   if intersecting_blocks.size() > 0
-    above_blocks = intersecting_blocks.select { |block| block.collision_side(HERO) == 'TOP' }
-    touching_right_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(HERO) == 'RIGHT' }
-    touching_left_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(HERO) == 'LEFT' }
+    above_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'TOP' }
+    touching_right_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'RIGHT' }
+    touching_left_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'LEFT' }
 
     if above_blocks.size() > 0
-      HERO.stand(above_blocks)
+      args.labels << [580, 400, 'Above Intersection']
+      hero.stand(above_blocks)
     else
-      HERO.unstand()
+      hero.unstand()
     end
 
     if touching_right_side_of_blocks.size() > 0
-      HERO.stop_left_movement(touching_right_side_of_blocks)
+      args.labels << [580, 500, 'Right Intersection']
+      hero.stop_left_movement(touching_right_side_of_blocks)
     else
-      HERO.allow_left_movement()
+      hero.allow_left_movement()
     end
 
     if touching_left_side_of_blocks.size() > 0
-      HERO.stop_right_movement(touching_left_side_of_blocks)
+      args.labels << [580, 600, 'Left Intersection']
+      hero.stop_right_movement(touching_left_side_of_blocks)
     else
-      HERO.allow_right_movement()
+      hero.allow_right_movement()
     end
   else
     # undo any block based actions
-    HERO.unstand()
-    HERO.allow_left_movement()
-    HERO.allow_right_movement()
+    hero.unstand()
+    hero.allow_left_movement()
+    hero.allow_right_movement()
   end
 end
 
 def input_checking(args)
-  HERO.jump() if args.inputs.keyboard.space
-  HERO.move_right() if right_pressed_no_left(args)
-  HERO.move_left() if left_pressed_no_right(args)
+  hero = args.state.sprites.hero
+
+  hero.jump() if args.inputs.keyboard.space
+  hero.move_right() if right_pressed_no_left(args)
+  hero.move_left() if left_pressed_no_right(args)
 end
 
 def right_pressed_no_left(args)
@@ -69,4 +73,12 @@ end
 
 def left_pressed_no_right(args)
   return args.inputs.left && !args.inputs.right
+end
+
+def initialize(args)
+  args.state.sprites.blocks = [Block.new(args, 500, 150), Block.new(args, 500 + 16 + 8, 150 - 16), Block.new(args, 500 + 16 + 8 + 16 + 8, 150)]
+  args.state.sprites.hero = Hero.new(args, 500, 200)
+
+  args.state.sprites.all = [args.state.sprites.hero]
+  args.state.sprites.all.concat(args.state.sprites.blocks)
 end
