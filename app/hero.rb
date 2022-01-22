@@ -105,7 +105,7 @@ class Hero < Sprite
 
   # Calculation methods
 
-  def calculate
+  def calculate(args)
     _calculate_gravity() unless @standing
     _calculate_jump() if @jumping
     _calculate_vertical_position()

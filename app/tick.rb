@@ -4,7 +4,7 @@ def tick(args)
 
   input_checking(args)
 
-  args.state.sprites.all.each(&:calculate)
+  args.state.sprites.all.each { |sprite| sprite.calculate(args) }
 
   collision_checking(args)
 
@@ -100,6 +100,7 @@ def initialize(args)
 
   args.state.sprites.all = [args.state.sprites.hero]
   args.state.sprites.all.concat(args.state.sprites.blocks)
+  args.state.sprites.all.concat(args.state.sprites.enemies)
 end
 
 def read_level(args)
@@ -113,6 +114,15 @@ def read_level(args)
   args.state.sprites.hero = Hero.new(args, level['hero'][0] * Block.default_width, level['hero'][1] * Block.default_height)
 
   args.state.sprites.blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
+
+  args.state.sprites.enemies = level['enemies'].map { |enemy|
+                                 Enemy.new(args,
+                                           enemy['start']['x'] * Block.default_width,
+                                           enemy['start']['y'] * Block.default_height,
+                                           enemy['end']['x'] * Block.default_width,
+                                           enemy['end']['y'] * Block.default_height,
+                                           enemy['path'],
+                                           enemy['duration']) }
 
   puts("Loading level #{level['name']} complete")
 end

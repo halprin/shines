@@ -10,7 +10,7 @@ class Sprite
     @h = height
   end
 
-  def calculate
+  def calculate(args)
     # do nothing by default
   end
 

@@ -6,6 +6,18 @@
     "green": 61,
     "blue": 64
   },
+  "enemies": [{
+    "start": {
+      "x": 16,
+      "y": 16
+    },
+    "end": {
+      "x": 20,
+      "y": 20
+    },
+    "path": "loop",
+    "duration": 2.0
+  }],
   "blocks": [{
       "type": "solid",
       "x": 0,
