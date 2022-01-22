@@ -1,6 +1,11 @@
 {
   "name": "Nightmare",
   "hero": [2, 1],
+  "background": {
+    "red": 89,
+    "green": 61,
+    "blue": 64
+  },
   "blocks": [{
       "type": "solid",
       "x": 0,

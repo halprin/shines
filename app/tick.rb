@@ -1,6 +1,6 @@
 def tick(args)
 
-  if args.state.tick_count == 0
+  if args.state.tick_count.zero?
     initialize(args)
   end
 
@@ -10,6 +10,7 @@ def tick(args)
 
   collision_checking(args)
 
+  args.outputs.background_color = args.state.background
   args.outputs.sprites << args.state.sprites.all
   display_ui(args)
 end
@@ -23,26 +24,26 @@ def collision_for_blocks(args)
 
   intersecting_blocks = args.state.sprites.blocks.select { |block| block.intersect_rect?(hero, 0) }
 
-  if intersecting_blocks.size() > 0
+  if intersecting_blocks.size().positive?
     above_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'TOP' }
     touching_right_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'RIGHT' }
     touching_left_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'LEFT' }
 
-    if above_blocks.size() > 0
+    if above_blocks.size().positive?
       args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Above', -2, 0, 255, 255, 255].label
       hero.stand(above_blocks)
     else
       hero.unstand()
     end
 
-    if touching_right_side_of_blocks.size() > 0
+    if touching_right_side_of_blocks.size().positive?
       args.outputs.debug << [args.grid.left + 100, args.grid.top - 60, 'Right', -2, 0, 255, 255, 255].label
       hero.stop_left_movement(touching_right_side_of_blocks)
     else
       hero.allow_left_movement()
     end
 
-    if touching_left_side_of_blocks.size() > 0
+    if touching_left_side_of_blocks.size().positive?
       args.outputs.debug << [args.grid.left + 200, args.grid.top - 60, 'Left', -2, 0, 255, 255, 255].label
       hero.stop_right_movement(touching_left_side_of_blocks)
     else
@@ -107,6 +108,8 @@ def read_level(args)
   level = args.gtk.parse_json_file('/data/level1.json')
 
   puts("Parsing level #{level['name']}")
+
+  args.state.background = [level['background']['red'], level['background']['green'], level['background']['blue']]
 
   args.state.sprites.hero = Hero.new(args, level['hero'][0] * Block.default_width, level['hero'][1] * Block.default_height)
 
