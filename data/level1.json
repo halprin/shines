@@ -1,36 +1,94 @@
 {
   "name": "Nightmare",
-  "hero": [1, 1],
-  "blocks": [
-    {
+  "hero": [2, 1],
+  "blocks": [{
       "type": "solid",
       "x": 0,
       "y": 0
-    },
-    {
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 1
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 2
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 3
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 4
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 5
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 6
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 7
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 8
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 9
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 10
+    }, {
+      "type": "solid",
+      "x": 0,
+      "y": 11
+    }, {
       "type": "solid",
       "x": 1,
       "y": 0
-    },
-    {
+    }, {
       "type": "solid",
       "x": 2,
       "y": 0
-    },
-    {
+    }, {
       "type": "solid",
       "x": 3,
       "y": 0
-    },
-    {
+    }, {
       "type": "solid",
       "x": 4,
       "y": 0
-    },
-    {
+    }, {
       "type": "solid",
       "x": 5,
       "y": 0
+    }, {
+      "type": "solid",
+      "x": 7,
+      "y": 3
+    }, {
+      "type": "solid",
+      "x": 8,
+      "y": 3
+    }, {
+      "type": "solid",
+      "x": 9,
+      "y": 3
+    }, {
+      "type": "solid",
+      "x": 10,
+      "y": 3
+    }, {
+      "type": "solid",
+      "x": 10,
+      "y": 7
     }
   ]
 }
