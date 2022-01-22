@@ -72,9 +72,6 @@ def left_pressed_no_right(args)
 end
 
 def initialize(args)
-  args.state.sprites.blocks = [Block.new(args, 500, 150), Block.new(args, 500 + 16 + 8, 150 - 16), Block.new(args, 500 + 16 + 8 + 16 + 8, 150)]
-  args.state.sprites.hero = Hero.new(args, 500, 200)
-
   read_level(args)
 
   args.state.sprites.all = [args.state.sprites.hero]
@@ -87,6 +84,9 @@ def read_level(args)
 
   puts("Parsing level #{level['name']}")
 
-  blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
-  args.state.sprites.blocks.concat(blocks)
+  args.state.sprites.hero = Hero.new(args, level['hero'][0] * Block.default_width, level['hero'][1] * Block.default_height)
+
+  args.state.sprites.blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
+
+  puts("Loading #{level['name']} complete")
 end

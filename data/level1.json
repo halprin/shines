@@ -1,5 +1,6 @@
 {
   "name": "Nightmare",
+  "hero": [1, 1],
   "blocks": [
     {
       "type": "solid",
