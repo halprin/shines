@@ -1,8 +1,6 @@
 def tick(args)
 
-  if args.state.tick_count.zero?
-    initialize(args)
-  end
+  initialize(args) if args.state.tick_count.zero?
 
   input_checking(args)
 
@@ -21,44 +19,41 @@ end
 
 def collision_for_blocks(args)
   hero = args.state.sprites.hero
+  blocks = args.state.sprites.blocks
 
-  intersecting_blocks = args.state.sprites.blocks.select { |block| block.intersect_rect?(hero, 0) }
+  inside_intersection = blocks.select { |block| block.intersect_rect?(hero, 0.1) }
 
-  if intersecting_blocks.size().positive?
-    above_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'TOP' }
-    touching_right_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'RIGHT' }
-    touching_left_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'LEFT' }
-    touching_bottom_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'BOTTOM' }
+  above_blocks = blocks.select { |block| block.intersect_rect?(hero, 0) && block.collision_side(hero) == 'TOP' }
 
-    if above_blocks.size().positive?
-      args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Top', -2, 0, 255, 255, 255].label
-      hero.stand(above_blocks)
-    else
-      hero.unstand()
-    end
-
-    if touching_bottom_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 300, args.grid.top - 60, 'Bottom', -2, 0, 255, 255, 255].label
-      hero.bonk(touching_bottom_side_of_blocks)
-    end
-
-    if touching_right_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 100, args.grid.top - 60, 'Right', -2, 0, 255, 255, 255].label
-      hero.stop_left_movement(touching_right_side_of_blocks)
-    else
-      hero.allow_left_movement()
-    end
-
-    if touching_left_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 200, args.grid.top - 60, 'Left', -2, 0, 255, 255, 255].label
-      hero.stop_right_movement(touching_left_side_of_blocks)
-    else
-      hero.allow_right_movement()
-    end
+  if above_blocks.size().positive?
+    args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Top', -2, 0, 255, 255, 255].label
+    hero.stand(above_blocks)
   else
-    # undo any block based actions
     hero.unstand()
+  end
+
+  touching_bottom_side_of_blocks = inside_intersection.select { |block| block.collision_side(hero) == 'BOTTOM' }
+
+  if touching_bottom_side_of_blocks.size().positive?
+    args.outputs.debug << [args.grid.left + 300, args.grid.top - 60, 'Bottom', -2, 0, 255, 255, 255].label
+    hero.bonk(touching_bottom_side_of_blocks)
+  end
+
+  touching_right_side_of_blocks = inside_intersection.select { |block| block.collision_side(hero) == 'RIGHT' }
+
+  if touching_right_side_of_blocks.size().positive?
+    args.outputs.debug << [args.grid.left + 100, args.grid.top - 60, 'Right', -2, 0, 255, 255, 255].label
+    hero.stop_left_movement(touching_right_side_of_blocks)
+  else
     hero.allow_left_movement()
+  end
+
+  touching_left_side_of_blocks = inside_intersection.select { |block| block.collision_side(hero) == 'LEFT' }
+
+  if touching_left_side_of_blocks.size().positive?
+    args.outputs.debug << [args.grid.left + 200, args.grid.top - 60, 'Left', -2, 0, 255, 255, 255].label
+    hero.stop_right_movement(touching_left_side_of_blocks)
+  else
     hero.allow_right_movement()
   end
 end
