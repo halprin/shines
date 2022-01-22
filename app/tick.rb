@@ -14,7 +14,20 @@ def tick(args)
 end
 
 def collision_checking(args)
+  collision_for_enemies(args)
   collision_for_blocks(args)
+end
+
+def collision_for_enemies(args)
+  hero = args.state.sprites.hero
+  enemies = args.state.sprites.enemies
+
+  touching_enemies = enemies.select { |enemy| enemy.intersect_rect?(hero, 0.1) }
+
+  if touching_enemies.size().positive?
+    hero.die()
+    args.state.lives -= 1
+  end
 end
 
 def collision_for_blocks(args)

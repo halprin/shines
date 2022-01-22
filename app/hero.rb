@@ -22,6 +22,10 @@ class Hero < Sprite
 
   # Action methods
 
+  def die
+    @path = '/sprites/hero/hero_dead.png'
+  end
+
   def stand(intersecting_blocks)
     @standing = true
 
