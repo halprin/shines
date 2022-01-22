@@ -16,7 +16,7 @@
       "y": 20
     },
     "path": "loop",
-    "duration": 2.0
+    "duration": 2
   }],
   "blocks": [{
       "type": "solid",
