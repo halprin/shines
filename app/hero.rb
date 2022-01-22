@@ -42,6 +42,15 @@ class Hero < Sprite
     _reset_jump()
   end
 
+  def bonk(intersecting_blocks)
+    @jumping = false
+    _reset_jump()
+
+    # TODO: support multiple blocks?
+    first_intersecting_block = intersecting_blocks[0]
+    @y = first_intersecting_block.y - @h
+  end
+
   def stop_right_movement(intersecting_blocks)
     @moving_right = false
     @allow_moving_right = false

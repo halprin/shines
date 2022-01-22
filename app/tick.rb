@@ -28,12 +28,18 @@ def collision_for_blocks(args)
     above_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'TOP' }
     touching_right_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'RIGHT' }
     touching_left_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'LEFT' }
+    touching_bottom_side_of_blocks = intersecting_blocks.select { |block| block.collision_side(hero) == 'BOTTOM' }
 
     if above_blocks.size().positive?
-      args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Above', -2, 0, 255, 255, 255].label
+      args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Top', -2, 0, 255, 255, 255].label
       hero.stand(above_blocks)
     else
       hero.unstand()
+    end
+
+    if touching_bottom_side_of_blocks.size().positive?
+      args.outputs.debug << [args.grid.left + 300, args.grid.top - 60, 'Bottom', -2, 0, 255, 255, 255].label
+      hero.bonk(touching_bottom_side_of_blocks)
     end
 
     if touching_right_side_of_blocks.size().positive?
