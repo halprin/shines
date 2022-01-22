@@ -88,5 +88,5 @@ def read_level(args)
 
   args.state.sprites.blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
 
-  puts("Loading #{level['name']} complete")
+  puts("Loading level #{level['name']} complete")
 end

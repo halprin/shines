@@ -11,6 +11,26 @@
       "type": "solid",
       "x": 1,
       "y": 0
+    },
+    {
+      "type": "solid",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "type": "solid",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "type": "solid",
+      "x": 4,
+      "y": 0
+    },
+    {
+      "type": "solid",
+      "x": 5,
+      "y": 0
     }
   ]
 }
