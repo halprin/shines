@@ -7,7 +7,7 @@ class Hero < Sprite
 
 
   def initialize(args, starting_x, starting_y)
-    super(args, '/sprites/hero/hero.png', starting_x, starting_y, 16, 16)
+    super(args, '/sprites/hero/hero.png', starting_x, starting_y, 40, 40)
 
     @jumping = false
     @standing = false
