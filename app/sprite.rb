@@ -17,14 +17,14 @@ class Sprite
   # Returns which side of this sprite that other_sprite is
   def collision_side(other_sprite)
 
-    radians = @args.geometry.angle_to(center(), other_sprite.center())
+    angle = @args.geometry.angle_to(center(), other_sprite.center())
 
-    if radians > 45 && radians < 135
+    if angle > 45 && angle < 135
       # A skinny top so we can't stand past the left side
       return 'TOP'
-    elsif radians >= 135 && radians <= 225
+    elsif angle >= 135 && angle <= 225
       return 'LEFT'
-    elsif radians > 225 && radians <= 315
+    elsif angle > 225 && angle <= 315
       return 'BOTTOM'
     else
       return 'RIGHT'

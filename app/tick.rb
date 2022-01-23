@@ -130,13 +130,9 @@ def read_level(args)
 
   args.state.sprites.enemies = level['enemies'].map { |enemy|
                                  Enemy.new(args,
-                                           convert_level_pathing(enemy['path']),
+                                           enemy['path'],
                                            enemy['path_type'],
                                            enemy['duration']) }
 
   puts("Loading level #{level['name']} complete")
-end
-
-def convert_level_pathing(level_path)
-
 end
