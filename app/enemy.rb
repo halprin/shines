@@ -14,6 +14,7 @@ class Enemy < Sprite
     @previous_progress = 0
     @current_pathing_segment_index = 0
     @next_pathing_segment_index = @pathing.size() > 1 ? 1 : 0
+    @next_pathing_incrementor = 1
   end
 
   def calculate(args)
@@ -21,18 +22,22 @@ class Enemy < Sprite
     if @previous_progress >= 1
       # fulfilled the entire animation of one segment
       @current_pathing_segment_index = @next_pathing_segment_index
-      @next_pathing_segment_index += 1
+      @next_pathing_segment_index += @next_pathing_incrementor
 
-      if @next_pathing_segment_index > @pathing.size() - 1
+      if @next_pathing_segment_index > @pathing.size() - 1 && @path_type == 'loop'
+        # for a loop type, we are at the end of the last segment, reset at the first segment
         @next_pathing_segment_index = 0
+      elsif @next_pathing_segment_index > @pathing.size() - 1 && @path_type == 'rewind'
+        # for a rewind type, we are at the end of the last segment, start going backwards
+        @next_pathing_segment_index = @pathing.size() - 2
+        @next_pathing_incrementor = -1
+      elsif @next_pathing_segment_index.negative? && @path_type == 'rewind'
+        # for a rewind type, we are at the beginning of the first segment, start going forwards
+        @next_pathing_segment_index = @pathing.size() > 1 ? 1 : 0
+        @next_pathing_incrementor = 1
       end
 
       @start_tick = args.state.tick_count
-
-      # if @path_type == 'rewind'
-      #   @starting_x, @ending_x = @ending_x, @starting_x
-      #   @starting_y, @ending_y = @ending_y, @starting_y
-      # end
     end
 
     progress = args.easing.ease(@start_tick, args.state.tick_count, @duration * 60, :identity)
