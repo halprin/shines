@@ -2,6 +2,7 @@ class Scene
 
   def initialize(id, args)
     @id = id
+    @args = args
   end
 
   def tick(args)

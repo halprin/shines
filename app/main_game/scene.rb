@@ -9,7 +9,7 @@ class MainGameScene < Scene
     @blocks = []
     @enemies = []
 
-    load_level(args, level_path)
+    load_level(level_path)
 
     @sprites = [@hero]
     @sprites.concat(@blocks)
@@ -17,23 +17,23 @@ class MainGameScene < Scene
   end
 
   def tick(args)
-    input_checking(args)
+    input_checking()
 
-    @sprites.each { |sprite| sprite.calculate(args) }
+    @sprites.each { |sprite| sprite.calculate(@args) }
 
-    collision_checking(args)
+    collision_checking
 
-    args.outputs.background_color = @background
-    args.outputs.sprites << @sprites
-    display_ui(args)
+    @args.outputs.background_color = @background
+    @args.outputs.sprites << @sprites
+    display_ui(@args)
   end
 
-  def collision_checking(args)
-    collision_for_enemies(args)
-    collision_for_blocks(args)
+  def collision_checking
+    collision_for_enemies()
+    collision_for_blocks()
   end
 
-  def collision_for_enemies(args)
+  def collision_for_enemies
 
     touching_enemies = @enemies.select { |enemy| enemy.intersect_rect?(@hero, 0.1) }
 
@@ -43,20 +43,20 @@ class MainGameScene < Scene
 
       if @lives.negative?
         # Go to the game over scene
-        args.state.scene = GameOverScene.new(args)
+        @args.state.scene = GameOverScene.new(@args)
         return
       end
 
-      reset_level(args)
+      reset_level()
     end
   end
 
-  def collision_for_blocks(args)
+  def collision_for_blocks
 
     touching_right_side_of_blocks = @blocks.select { |block| block.intersect_rect?(@hero, 0.1) && block.collision_side(@hero) == 'RIGHT' }
 
     if touching_right_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 100, args.grid.top - 60, 'Right', -2, 0, 255, 255, 255].label
+      @args.outputs.debug << [@args.grid.left + 100, @args.grid.top - 60, 'Right', -2, 0, 255, 255, 255].label
       @hero.stop_left_movement(touching_right_side_of_blocks)
     else
       @hero.allow_left_movement()
@@ -65,7 +65,7 @@ class MainGameScene < Scene
     touching_left_side_of_blocks = @blocks.select { |block| block.intersect_rect?(@hero, 0.1) && block.collision_side(@hero) == 'LEFT' }
 
     if touching_left_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 200, args.grid.top - 60, 'Left', -2, 0, 255, 255, 255].label
+      @args.outputs.debug << [@args.grid.left + 200, @args.grid.top - 60, 'Left', -2, 0, 255, 255, 255].label
       @hero.stop_right_movement(touching_left_side_of_blocks)
     else
       @hero.allow_right_movement()
@@ -74,7 +74,7 @@ class MainGameScene < Scene
     above_blocks = @blocks.select { |block| block.intersect_rect?(@hero, 0) && block.collision_side(@hero) == 'TOP' }
 
     if above_blocks.size().positive?
-      args.outputs.debug << [args.grid.left, args.grid.top - 60, 'Top', -2, 0, 255, 255, 255].label
+      @args.outputs.debug << [@args.grid.left, @args.grid.top - 60, 'Top', -2, 0, 255, 255, 255].label
       @hero.stand(above_blocks)
     else
       @hero.unstand()
@@ -83,24 +83,24 @@ class MainGameScene < Scene
     touching_bottom_side_of_blocks = @blocks.select { |block| block.intersect_rect?(@hero, 0.1) && block.collision_side(@hero) == 'BOTTOM' }
 
     if touching_bottom_side_of_blocks.size().positive?
-      args.outputs.debug << [args.grid.left + 300, args.grid.top - 60, 'Bottom', -2, 0, 255, 255, 255].label
+      @args.outputs.debug << [@args.grid.left + 300, @args.grid.top - 60, 'Bottom', -2, 0, 255, 255, 255].label
       @hero.bonk(touching_bottom_side_of_blocks)
     end
   end
 
-  def input_checking(args)
+  def input_checking
 
-    @hero.jump() if args.inputs.keyboard.space
-    @hero.move_right() if right_pressed_no_left(args)
-    @hero.move_left() if left_pressed_no_right(args)
+    @hero.jump() if @args.inputs.keyboard.space
+    @hero.move_right() if right_pressed_no_left()
+    @hero.move_left() if left_pressed_no_right()
   end
 
-  def right_pressed_no_left(args)
-    return args.inputs.right && !args.inputs.left
+  def right_pressed_no_left
+    return @args.inputs.right && !@args.inputs.left
   end
 
-  def left_pressed_no_right(args)
-    return args.inputs.left && !args.inputs.right
+  def left_pressed_no_right
+    return @args.inputs.left && !@args.inputs.right
   end
 
   def display_ui(args)
@@ -123,45 +123,45 @@ class MainGameScene < Scene
     args.outputs.labels << [args.grid.left + 350, args.grid.top - 16, @lives, 5, 0, 255, 255, 255]
   end
 
-  def reset_level(args)
+  def reset_level
 
-    parse_level(args, @level)
+    parse_level(@level)
 
     @sprites = [@hero]
     @sprites.concat(@blocks)
     @sprites.concat(@enemies)
   end
 
-  def load_level(args, level_path)
+  def load_level(level_path)
     puts("Loading level #{level_path}")
 
-    level = read_level(args, level_path)
-    parse_level(args, level)
+    level = read_level(level_path)
+    parse_level(level)
 
     puts("Loading level #{level['name']} complete")
   end
 
-  def read_level(args, level_path)
+  def read_level(level_path)
     puts("Reading level #{level_path}")
 
-    level = args.gtk.parse_json_file(level_path)
+    level = @args.gtk.parse_json_file(level_path)
     @level = level
 
     puts('Reading level complete')
     return level
   end
 
-  def parse_level(args, level)
+  def parse_level(level)
     puts("Parsing level #{level['name']}")
 
     @background = [level['background']['red'], level['background']['green'], level['background']['blue']]
 
-    @hero = Hero.new(args, level['hero'][0] * Block.default_width, level['hero'][1] * Block.default_height)
+    @hero = Hero.new(@args, level['hero'][0] * Block.default_width, level['hero'][1] * Block.default_height)
 
-    @blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
+    @blocks = level['blocks'].map { |block| Block.new(@args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
 
     @enemies = level['enemies'].map { |enemy|
-      Enemy.new(args,
+      Enemy.new(@args,
                 enemy['path'],
                 enemy['path_type'],
                 enemy['duration']) }
