@@ -7,16 +7,13 @@ class Enemy < Sprite
     super(args, '/sprites/enemies/enemy.png', starting_x, starting_y, 40, 40)
 
     @pathing = pathing
-    # @ending_x = pathing[pathing.size() - 1]['x'] * Block.default_width
-    # @ending_y = pathing[pathing.size() - 1]['y'] * Block.default_height
-
     @path_type = path_type
     @duration = duration
 
     @start_tick = 0
     @previous_progress = 0
     @current_pathing_segment_index = 0
-    @next_pathing_segment_index = 1
+    @next_pathing_segment_index = @pathing.size() > 1 ? 1 : 0
   end
 
   def calculate(args)
