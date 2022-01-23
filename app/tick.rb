@@ -27,6 +27,7 @@ def collision_for_enemies(args)
   if touching_enemies.size().positive?
     hero.die()
     args.state.lives -= 1
+    reset_level(args)
   end
 end
 
@@ -109,17 +110,42 @@ def initialize(args)
   args.state.score = 0
   args.state.lives = 5
 
-  read_level(args)
+  load_level(args)
 
   args.state.sprites.all = [args.state.sprites.hero]
   args.state.sprites.all.concat(args.state.sprites.blocks)
   args.state.sprites.all.concat(args.state.sprites.enemies)
 end
 
+def reset_level(args)
+
+  parse_level(args, args.state.level)
+
+  args.state.sprites.all = [args.state.sprites.hero]
+  args.state.sprites.all.concat(args.state.sprites.blocks)
+  args.state.sprites.all.concat(args.state.sprites.enemies)
+end
+
+def load_level(args)
+  puts('Loading level')
+
+  level = read_level(args)
+  parse_level(args, level)
+
+  puts("Loading level #{level['name']} complete")
+end
+
 def read_level(args)
   puts('Reading level')
-  level = args.gtk.parse_json_file('/data/level1.json')
 
+  level = args.gtk.parse_json_file('/data/level1.json')
+  args.state.level = level
+
+  puts('Reading level complete')
+  return level
+end
+
+def parse_level(args, level)
   puts("Parsing level #{level['name']}")
 
   args.state.background = [level['background']['red'], level['background']['green'], level['background']['blue']]
@@ -129,10 +155,10 @@ def read_level(args)
   args.state.sprites.blocks = level['blocks'].map { |block| Block.new(args, block['x'] * Block.default_width, block['y'] * Block.default_height) }
 
   args.state.sprites.enemies = level['enemies'].map { |enemy|
-                                 Enemy.new(args,
-                                           enemy['path'],
-                                           enemy['path_type'],
-                                           enemy['duration']) }
+    Enemy.new(args,
+              enemy['path'],
+              enemy['path_type'],
+              enemy['duration']) }
 
-  puts("Loading level #{level['name']} complete")
+  puts("Parsing level #{level['name']} complete")
 end
