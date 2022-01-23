@@ -40,6 +40,13 @@ class MainGameScene < Scene
     if touching_enemies.size().positive?
       @hero.die()
       @lives -= 1
+
+      if @lives.negative?
+        # Go to the game over scene
+        args.state.scene = GameOverScene.new(args)
+        return
+      end
+
       reset_level(args)
     end
   end

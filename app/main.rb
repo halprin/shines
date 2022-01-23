@@ -9,5 +9,8 @@ require '/app/main_game/hero.rb'
 require '/app/main_game/enemy.rb'
 require '/app/main_game/block.rb'
 
+# game over scene
+require '/app/game_over/scene.rb'
+
 # final tick
 require '/app/tick.rb'
