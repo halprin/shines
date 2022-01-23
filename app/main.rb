@@ -2,6 +2,7 @@ $gtk.reset seed: 26
 
 require '/app/scene.rb'
 require '/app/sprite.rb'
+require '/app/button.rb'
 
 # main menu scene
 require '/app/main_menu/main_menu_scene.rb'
