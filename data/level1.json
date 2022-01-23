@@ -7,26 +7,30 @@
     "blue": 64
   },
   "enemies": [{
-    "start": {
-      "x": 16,
-      "y": 16
-    },
-    "end": {
-      "x": 20,
-      "y": 20
-    },
-    "path": "rewind",
+    "path": [{
+      "start": {
+        "x": 16,
+        "y": 16
+      },
+      "end": {
+        "x": 20,
+        "y": 20
+      }
+    }],
+    "path_type": "rewind",
     "duration": 2
   }, {
-    "start": {
-      "x": 7,
-      "y": 7
-    },
-    "end": {
-      "x": 1,
-      "y": 7
-    },
-    "path": "loop",
+    "path": [{
+      "start": {
+        "x": 7,
+        "y": 7
+      },
+      "end": {
+        "x": 1,
+        "y": 7
+      }
+    }],
+    "path_type": "loop",
     "duration": 1
   }],
   "blocks": [{

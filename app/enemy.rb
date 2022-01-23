@@ -1,13 +1,13 @@
 class Enemy < Sprite
 
-  def initialize(args, starting_x, starting_y, ending_x, ending_y, path_type, duration)
-    super(args, '/sprites/enemies/enemy.png', starting_x, starting_y, 40, 40)
+  def initialize(args, pathing, path_type, duration)
+    @starting_x = pathing[0].start.x
+    @starting_y = pathing[0].start.y
 
-    @starting_x = starting_x
-    @starting_y = starting_y
+    super(args, '/sprites/enemies/enemy.png', @starting_x, @starting_y, 40, 40)
 
-    @ending_x = ending_x
-    @ending_y = ending_y
+    @ending_x = pathing[0].end.x
+    @ending_y = pathing[0].end.y
 
     @path_type = path_type
     @duration = duration
