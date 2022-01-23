@@ -3,6 +3,9 @@ $gtk.reset seed: 26
 require '/app/scene.rb'
 require '/app/sprite.rb'
 
+# main menu scene
+require '/app/main_menu/main_menu_scene.rb'
+
 # main game scene
 require '/app/main_game/main_game_scene.rb'
 require '/app/main_game/hero.rb'

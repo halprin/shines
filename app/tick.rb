@@ -6,5 +6,6 @@ def tick(args)
 end
 
 def initialize(args)
-  args.state.scene = MainGameScene.new('/data/level1.json', args)
+  # args.state.scene = MainGameScene.new('/data/level1.json', args)
+  args.state.scene = MainMenuScene.new(args)
 end
